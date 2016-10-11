@@ -7,7 +7,7 @@ import java.util.*
  * Author: Sukeerthi Khadri
  * Created: 10/9/16
  */
-class PlaceModel(val map: MutableMap<String, Any?>) {
+data class PlaceModel(val map: MutableMap<String, Any?>) {
     var _id: String by map
     var name: String by map
     var address: String by map
@@ -34,7 +34,7 @@ class PlaceModel(val map: MutableMap<String, Any?>) {
     }
 }
 
-class PersonModel(val map: MutableMap<String, Any?>) {
+data class PersonModel(val map: MutableMap<String, Any?>) {
     var _id: String by map
     var name: String by map
     var email: String by map
@@ -50,7 +50,7 @@ class PersonModel(val map: MutableMap<String, Any?>) {
     }
 }
 
-class HighlightModel(val map: MutableMap<String, Any?>) {
+data class HighlightModel(val map: MutableMap<String, Any?>) {
     var _id: Long by map
     var message: String by map
     var person: String by map
@@ -65,7 +65,7 @@ class HighlightModel(val map: MutableMap<String, Any?>) {
     }
 }
 
-class RecordModel(val map: MutableMap<String, Any?>) {
+data class RecordModel(val map: MutableMap<String, Any?>) {
     var _id: Long by map
     var person: String by map
     var highlight: Long by map

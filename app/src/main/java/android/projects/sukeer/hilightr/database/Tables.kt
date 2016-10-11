@@ -5,8 +5,7 @@ package android.projects.sukeer.hilightr.database
  * Author: Sukeerthi Khadri
  * Created: 10/9/16
  */
-
-object Place {
+object PlaceConstant {
     val TABLE_NAME = "place"
     val COL_ID = "_id"
     val COL_NAME = "name"
@@ -20,7 +19,7 @@ object Place {
     val COL_RATING = "rating"
 }
 
-object Person {
+object PersonConstant {
     val TABLE_NAME = "person"
     val COL_ID = "_id"
     val COL_NAME = "name"
@@ -29,7 +28,7 @@ object Person {
     val COL_TOKEN = "token"
 }
 
-object Highlight {
+object HighlightConstant {
     val TABLE_NAME = "highlight"
     val COL_ID = "_id"
     val COL_MESSAGE = "message"
@@ -38,7 +37,7 @@ object Highlight {
     val COL_DATE = "date"
 }
 
-object Record {
+object RecordConstant {
     val TABLE_NAME = "record"
     val COL_ID = "_id"
     val COL_PER_ID = "person"
