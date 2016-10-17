@@ -17,6 +17,10 @@ class DbHelper(context: Context = App.instance) : ManagedSQLiteOpenHelper(contex
         val instance by lazy { DbHelper() }
     }
 
+    override fun onConfigure(db: SQLiteDatabase) {
+        db.setForeignKeyConstraintsEnabled(true)
+    }
+
     override fun onCreate(db: SQLiteDatabase) {
         db.createTable(PlaceConstant.TABLE_NAME, true,
                 PlaceConstant.COL_ID to TEXT + PRIMARY_KEY,

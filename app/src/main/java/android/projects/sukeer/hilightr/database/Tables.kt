@@ -41,8 +41,8 @@ object RecordConstant {
     val TABLE_NAME = "record"
     val COL_ID = "_id"
     val COL_PER_ID = "person"
+    val COL_PLACE_ID = "place"
     val COL_HIGHLIGHT_ID = "highlight"
-    val COL_PLACE_ID = "place_id"
 }
 
 

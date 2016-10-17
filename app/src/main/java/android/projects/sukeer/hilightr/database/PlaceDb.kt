@@ -12,9 +12,10 @@ import org.jetbrains.anko.db.*
 class PlaceDb(context: Context = App.instance) {
     private val dbHelper: DbHelper = DbHelper(context)
 
-    private val parser = rowParser { id: String, name: String, address: String, phone: String,
-        website: String, latitude: Double, longitude: Double, type: Int, price: Int, rating: Int ->
-        PlaceModel(id, name, address, phone, website, latitude, longitude, type, price, rating)
+    // parse row of Cursor into model object
+    private val parser = rowParser { _id: String, name: String, address: String, phone: String,
+                                     website: String, latitude: Double, longitude: Double, type: Int, price: Int, rating: Int ->
+        PlaceModel(_id, name, address, phone, website, latitude, longitude, type, price, rating)
     }
 
     fun clearTable() = dbHelper.use {
@@ -30,8 +31,8 @@ class PlaceDb(context: Context = App.instance) {
     fun updatePlace(place: PlaceModel) = dbHelper.use {
         with(place) {
             update(PlaceConstant.TABLE_NAME, *map.toVarArgArray())
-                .where("_id = {placeId}", "placeId" to _id)
-                .exec()
+                    .where("_id = {placeId}", "placeId" to _id)
+                    .exec()
         }
     }
 
@@ -44,6 +45,6 @@ class PlaceDb(context: Context = App.instance) {
     }
 
     fun getAllPlaces() = dbHelper.use {
-        select(PlaceConstant.TABLE_NAME).parseList(parser)
+        select(PlaceConstant.TABLE_NAME).exec { parseList(parser) }
     }
 }

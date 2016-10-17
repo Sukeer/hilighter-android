@@ -68,12 +68,12 @@ data class HighlightModel(val map: MutableMap<String, Any?>) {
 data class RecordModel(val map: MutableMap<String, Any?>) {
     var _id: Long by map
     var person: String by map
-    var highlight: Long by map
     var place: String by map
+    var highlight: Long by map
 
-    constructor(person: String, highlight: Long, place: String) : this(HashMap()) {
+    constructor(person: String, place: String, highlight: Long) : this(HashMap()) {
         this.person = person
-        this.highlight = highlight
         this.place = place
+        this.highlight = highlight
     }
 }
