@@ -30,6 +30,7 @@ class HighlightDatabaseTest {
         @BeforeClass @JvmStatic
         fun initialize() {
             val appContext = InstrumentationRegistry.getTargetContext()
+            appContext.deleteDatabase("hilightr.db")
             highlightDb = HighlightDb(appContext)
             placeDb = PlaceDb(appContext)
             personDb = PersonDb(appContext)

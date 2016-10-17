@@ -27,11 +27,11 @@ class RecordDatabaseTest {
         private val validPlace = PlaceModel("1", "Willis Tower", "77 West Wacker", "18000000000", "www.google.com", 45.3909, 23.83291, 1, 1, 3)
         private val validPerson = PersonModel("1", "John Doe", "jdoe@gmail.com", "none", "a")
         private val validHighlight = HighlightModel("Hello world", "1", "1", 1000)
-        private val validRecord = RecordModel("hi", "hiif", 2)
 
         @BeforeClass @JvmStatic
         fun initialize() {
             val appContext = InstrumentationRegistry.getTargetContext()
+            appContext.deleteDatabase("hilightr.db")
             recordDb = RecordDb(appContext)
             highlightDb = HighlightDb(appContext)
             placeDb = PlaceDb(appContext)
@@ -42,10 +42,10 @@ class RecordDatabaseTest {
     @Before
     fun prepareDatabase() {
         // clear table before every test
+        recordDb.clearTable()
         highlightDb.clearTable()
         personDb.clearTable()
         placeDb.clearTable()
-        recordDb.clearTable()
     }
 
     @Test
@@ -54,9 +54,7 @@ class RecordDatabaseTest {
         personDb.addPerson(validPerson)
         val highlightInsertionId = highlightDb.addHighlight(validHighlight)
 
-        Assert.assertNotEquals("Highlight insertion fail", -1L, highlightInsertionId)
-        Assert.assertNotNull("Highlight retrieval fail", highlightDb.getHighlight(highlightInsertionId))
-
+        val validRecord = RecordModel(validPerson._id, validPlace._id, highlightInsertionId)
         val recordInsertionId = recordDb.addRecord(validRecord)
         Assert.assertNotEquals("Insertion failure: ID not valid", -1, recordInsertionId)
 
@@ -70,7 +68,7 @@ class RecordDatabaseTest {
     @Test
     fun testInvalidInsertion() {
         // insertion should fail due to foreign key constraints
-        val insertionId = recordDb.addRecord(RecordModel("1", "1", 1))
+        val insertionId = recordDb.addRecord(RecordModel("1", "1", 999))
         Assert.assertEquals("Foreign key constraint not met", -1, insertionId)
 
         val retrievedRecord = recordDb.getRecord(insertionId)
@@ -81,11 +79,18 @@ class RecordDatabaseTest {
     fun testUpdate() {
         placeDb.addPlace(validPlace)
         personDb.addPerson(validPerson)
+        // add another person with id = "2"
+        val updatedPersonMap = HashMap(validPerson.map)
+        updatedPersonMap["_id"] = "2"
+        updatedPersonMap["name"] = "Sam Smith"
+        updatedPersonMap["token"] = "b"
+        personDb.addPerson(validPerson.copy(updatedPersonMap))
+
         val highlightInsertionId = highlightDb.addHighlight(validHighlight)
         val recordInsertionId = recordDb.addRecord(RecordModel(validPerson._id, validPlace._id, highlightInsertionId))
         val validRecord = recordDb.getRecord(recordInsertionId)
 
-        // copy modified record and update in database
+        // copy modified record and update person id
         val updatedRecordMap = HashMap(validRecord!!.map)
         updatedRecordMap["_id"] = recordInsertionId
         updatedRecordMap["person"] = "2"
@@ -119,7 +124,7 @@ class RecordDatabaseTest {
     }
 
     @Test
-    fun testRetrieveAllHighlights() {
+    fun testRetrieveAllRecords() {
         placeDb.addPlace(validPlace)
         personDb.addPerson(validPerson)
         highlightDb.addHighlight(validHighlight)

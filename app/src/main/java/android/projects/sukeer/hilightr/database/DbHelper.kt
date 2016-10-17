@@ -47,11 +47,20 @@ class DbHelper(context: Context = App.instance) : ManagedSQLiteOpenHelper(contex
                 HighlightConstant.COL_DATE to INTEGER + NOT_NULL,
                 "" to FOREIGN_KEY(HighlightConstant.COL_PERSON, PersonConstant.TABLE_NAME, PersonConstant.COL_ID),
                 "" to FOREIGN_KEY(HighlightConstant.COL_PLACE, PlaceConstant.TABLE_NAME, PlaceConstant.COL_ID))
+        /*db.execSQL("CREATE TABLE ${RecordConstant.TABLE_NAME} (" +
+                "${RecordConstant.COL_ID} INTEGER PRIMARY KEY NOT NULL," +
+                "${RecordConstant.COL_PER_ID} TEXT NOT NULL," +
+                "${RecordConstant.COL_PLACE_ID} TEXT NOT NULL," +
+                "${RecordConstant.COL_HIGHLIGHT_ID} INTEGER NOT NULL UNIQUE," +
+                "FOREIGN KEY(${RecordConstant.COL_PER_ID}) REFERENCES ${PersonConstant.TABLE_NAME}(${PersonConstant.COL_ID})," +
+                "FOREIGN KEY(${RecordConstant.COL_PLACE_ID}) REFERENCES ${PlaceConstant.TABLE_NAME}(${PlaceConstant.COL_ID})," +
+                "FOREIGN KEY(${RecordConstant.COL_HIGHLIGHT_ID}) REFERENCES ${HighlightConstant.TABLE_NAME}(${HighlightConstant.COL_ID}));")
+        */
         db.createTable(RecordConstant.TABLE_NAME, true,
                 RecordConstant.COL_ID to INTEGER + PRIMARY_KEY,
                 RecordConstant.COL_PER_ID to TEXT + NOT_NULL,
                 RecordConstant.COL_PLACE_ID to TEXT + NOT_NULL,
-                RecordConstant.COL_HIGHLIGHT_ID to INTEGER + NOT_NULL,
+                RecordConstant.COL_HIGHLIGHT_ID to INTEGER + NOT_NULL + UNIQUE,
                 "" to FOREIGN_KEY(RecordConstant.COL_PER_ID, PersonConstant.TABLE_NAME, PersonConstant.COL_ID),
                 "" to FOREIGN_KEY(RecordConstant.COL_PLACE_ID, PlaceConstant.TABLE_NAME, PlaceConstant.COL_ID),
                 "" to FOREIGN_KEY(RecordConstant.COL_HIGHLIGHT_ID, HighlightConstant.TABLE_NAME, HighlightConstant.COL_ID))

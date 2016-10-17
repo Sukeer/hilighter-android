@@ -26,6 +26,7 @@ class PlaceDatabaseTest {
         @BeforeClass @JvmStatic
         fun initialize() {
             val appContext = InstrumentationRegistry.getTargetContext()
+            appContext.deleteDatabase("hilightr.db")
             placeDb = PlaceDb(appContext)
         }
     }
