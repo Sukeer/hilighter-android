@@ -47,7 +47,7 @@ class PersonDatabaseTest {
         Assert.assertEquals("Name invalid", validPerson.name, retrievedPerson.name)
         Assert.assertEquals("Email invalid", validPerson.email, retrievedPerson.email)
         Assert.assertEquals("Photo URL invalid", validPerson.photo, retrievedPerson.photo)
-        Assert.assertEquals("Token invalid", validPerson.token, retrievedPerson.token)
+        Assert.assertEquals("UID invalid", validPerson.uid, retrievedPerson.uid)
     }
 
     @Test
@@ -74,7 +74,7 @@ class PersonDatabaseTest {
         // copy modified person and add to database for future deletion
         val personToDeleteMap = HashMap(validPerson.map)
         personToDeleteMap["_id"] = "2"
-        personToDeleteMap["token"] = "b"
+        personToDeleteMap["uid"] = "b"
         val id = personToDeleteMap["_id"] as String
 
         // add person and check validity
@@ -95,7 +95,7 @@ class PersonDatabaseTest {
         val newPerson = HashMap(validPerson.map)
         newPerson["_id"] = "2"
         newPerson["name"] = "Clark Kent"
-        newPerson["token"] = "b"
+        newPerson["uid"] = "b"
         personDb.addPerson(validPerson.copy(newPerson))
 
         val persons = personDb.getAllPersons()

@@ -2,6 +2,8 @@ package android.projects.sukeer.hilightr.database
 
 import android.content.Context
 import android.projects.sukeer.hilightr.utility.App
+import android.projects.sukeer.hilightr.utility.clear
+import android.projects.sukeer.hilightr.utility.toVarArgArray
 import org.jetbrains.anko.db.*
 
 /**
@@ -9,8 +11,15 @@ import org.jetbrains.anko.db.*
  * Author: Sukeerthi Khadri
  * Created: 10/10/16
  */
-class PlaceDb(context: Context = App.instance) {
-    private val dbHelper: DbHelper = DbHelper(context)
+class PlaceDb(val context: Context = App.instance) {
+
+    private val dbHelper: DbHelper
+        get() =
+        if (context == App.instance) {
+            DbHelper.instance
+        } else {
+            DbHelper(context)
+        }
 
     // parse row of Cursor into model object
     private val parser = rowParser { _id: String, name: String, address: String, phone: String,

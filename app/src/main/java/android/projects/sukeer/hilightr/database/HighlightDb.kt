@@ -2,6 +2,8 @@ package android.projects.sukeer.hilightr.database
 
 import android.content.Context
 import android.projects.sukeer.hilightr.utility.App
+import android.projects.sukeer.hilightr.utility.clear
+import android.projects.sukeer.hilightr.utility.toVarArgArray
 import org.jetbrains.anko.db.*
 
 /**
@@ -9,13 +11,20 @@ import org.jetbrains.anko.db.*
  * Author: Sukeerthi Khadri
  * Created: 10/16/16
  */
-class HighlightDb(context: Context = App.instance) {
+class HighlightDb(val context: Context = App.instance) {
 
-    private val dbHelper: DbHelper = DbHelper(context)
+    private val dbHelper: DbHelper
+        get() =
+        if (context == App.instance) {
+            DbHelper.instance
+        } else {
+            DbHelper(context)
+        }
 
     // parse row of Cursor into model object
-    private val parser = rowParser { _id: Long, message: String, person: String, place: String, date: Long ->
-        HighlightModel(message, person, place, date)
+    private val parser = rowParser { _id: Long?, message: String?, person: String?, place: String?, date: Long? ->
+        val params = mutableMapOf("_id" to _id, "message" to message, "person" to person, "place" to place, "date" to date)
+        HighlightModel(params)
     }
 
     fun clearTable() = dbHelper.use {
@@ -48,6 +57,6 @@ class HighlightDb(context: Context = App.instance) {
 
     fun getAllHighlights() = dbHelper.use {
         select(HighlightConstant.TABLE_NAME)
-            .exec { parseList(parser) }
+                .exec { parseList(parser) }
     }
 }

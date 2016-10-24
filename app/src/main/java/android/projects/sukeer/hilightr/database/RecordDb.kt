@@ -2,6 +2,8 @@ package android.projects.sukeer.hilightr.database
 
 import android.content.Context
 import android.projects.sukeer.hilightr.utility.App
+import android.projects.sukeer.hilightr.utility.clear
+import android.projects.sukeer.hilightr.utility.toVarArgArray
 import org.jetbrains.anko.db.*
 
 /**
@@ -9,13 +11,20 @@ import org.jetbrains.anko.db.*
  * Author: Sukeerthi Khadri
  * Created: 10/16/16
  */
-class RecordDb(context: Context = App.instance) {
+class RecordDb(val context: Context = App.instance) {
 
-    private val dbHelper: DbHelper = DbHelper(context)
+    private val dbHelper: DbHelper
+        get() =
+        if (context == App.instance) {
+            DbHelper.instance
+        } else {
+            DbHelper(context)
+        }
 
     // parse row of Cursor into model object
-    private val parser = rowParser { _id: Long, person: String, place: String, highlight: Long ->
-        RecordModel(person, place, highlight)
+    private val parser = rowParser { _id: Long?, person: String?, place: String?, highlight: Long? ->
+        val params = mutableMapOf("_id" to _id, "person" to person, "place" to place, "highlight" to highlight)
+        RecordModel(params)
     }
 
     fun clearTable() = dbHelper.use {

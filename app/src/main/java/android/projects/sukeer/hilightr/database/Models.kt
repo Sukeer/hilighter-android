@@ -39,14 +39,14 @@ data class PersonModel(val map: MutableMap<String, Any?>) {
     var name: String by map
     var email: String by map
     var photo: String by map
-    var token: String by map
+    var uid: String by map
 
-    constructor(id: String, name: String, email: String, photo: String, token: String) : this(HashMap()) {
+    constructor(id: String, name: String, email: String, photo: String, uid: String) : this(HashMap()) {
         this._id = id
         this.name = name
         this.email = email
         this.photo = photo
-        this.token = token
+        this.uid = uid
     }
 }
 

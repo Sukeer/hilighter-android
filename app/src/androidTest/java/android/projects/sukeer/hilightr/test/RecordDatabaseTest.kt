@@ -56,11 +56,12 @@ class RecordDatabaseTest {
 
         val validRecord = RecordModel(validPerson._id, validPlace._id, highlightInsertionId)
         val recordInsertionId = recordDb.addRecord(validRecord)
-        Assert.assertNotEquals("Insertion failure: ID not valid", -1, recordInsertionId)
+        Assert.assertNotEquals("Insertion ID not valid", -1, recordInsertionId)
 
         val retrievedRecord = recordDb.getRecord(recordInsertionId)
-        Assert.assertNotNull("Insertion failure: record not found", retrievedRecord)
-        Assert.assertEquals("Person id mismatch", validPerson._id, retrievedRecord!!.person)
+        Assert.assertNotNull("Record not found", retrievedRecord)
+        Assert.assertEquals("Record id mismatch", recordInsertionId, retrievedRecord!!._id)
+        Assert.assertEquals("Person id mismatch", validPerson._id, retrievedRecord.person)
         Assert.assertEquals("Place id mismatch", validPlace._id, retrievedRecord.place)
         Assert.assertEquals("Highlight id mismatch", highlightInsertionId, retrievedRecord.highlight)
     }
@@ -83,7 +84,7 @@ class RecordDatabaseTest {
         val updatedPersonMap = HashMap(validPerson.map)
         updatedPersonMap["_id"] = "2"
         updatedPersonMap["name"] = "Sam Smith"
-        updatedPersonMap["token"] = "b"
+        updatedPersonMap["uid"] = "b"
         personDb.addPerson(validPerson.copy(updatedPersonMap))
 
         val highlightInsertionId = highlightDb.addHighlight(validHighlight)

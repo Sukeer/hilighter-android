@@ -53,8 +53,9 @@ class HighlightDatabaseTest {
 
         val retrievedHighlight = highlightDb.getHighlight(insertionId)
 
-        Assert.assertNotNull("Retrieval failed, insertion invalid", retrievedHighlight)
-        Assert.assertEquals("Message invalid", validHighlight.message, retrievedHighlight!!.message)
+        Assert.assertNotNull("Retrieval failed", retrievedHighlight)
+        Assert.assertEquals("_id invalid", insertionId, retrievedHighlight!!._id)
+        Assert.assertEquals("Message invalid", validHighlight.message, retrievedHighlight.message)
         Assert.assertEquals("Person _id invalid", validHighlight.person, retrievedHighlight.person)
         Assert.assertEquals("Place _id invalid", validHighlight.place, retrievedHighlight.place)
         Assert.assertEquals("Date invalid", validHighlight.date, retrievedHighlight.date)

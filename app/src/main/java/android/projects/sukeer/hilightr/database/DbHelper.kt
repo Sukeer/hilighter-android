@@ -38,7 +38,7 @@ class DbHelper(context: Context = App.instance) : ManagedSQLiteOpenHelper(contex
                 PersonConstant.COL_NAME to TEXT + NOT_NULL,
                 PersonConstant.COL_EMAIL to TEXT + NOT_NULL,
                 PersonConstant.COL_PHOTO to TEXT + NOT_NULL,
-                PersonConstant.COL_TOKEN to TEXT + NOT_NULL + UNIQUE)
+                PersonConstant.COL_UID to TEXT + NOT_NULL + UNIQUE)
         db.createTable(HighlightConstant.TABLE_NAME, true,
                 HighlightConstant.COL_ID to INTEGER + PRIMARY_KEY,
                 HighlightConstant.COL_MESSAGE to TEXT + NOT_NULL,
