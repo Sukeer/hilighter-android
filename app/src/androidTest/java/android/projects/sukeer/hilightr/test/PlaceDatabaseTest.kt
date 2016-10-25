@@ -33,14 +33,14 @@ class PlaceDatabaseTest {
 
     @Before
     fun prepareDatabase() {
-        // clear table before every test
+        // clear table before every testR
         placeDb.clearTable()
     }
 
     @Test
     fun testValidInsertion() {
         placeDb.addPlace(validPlace)
-        val retrievedPlace = placeDb.getPlace(validPlace._id)
+        val retrievedPlace = placeDb.getPlaceByColumn("_id", validPlace._id)
 
         Assert.assertNotNull("Retrieval failed", retrievedPlace)
         Assert.assertEquals("ID invalid", validPlace._id, retrievedPlace!!._id)
@@ -66,7 +66,7 @@ class PlaceDatabaseTest {
         placeDb.updatePlace(updatedValidPlace)
 
         // assertions
-        val retrievedPlace = placeDb.getPlace(validPlace._id)
+        val retrievedPlace = placeDb.getPlaceByColumn("_id", validPlace._id)
         Assert.assertNotNull("Retrieval failed", retrievedPlace)
         Assert.assertEquals("Update name invalid", "Sears Tower", retrievedPlace!!.name)
         Assert.assertEquals("Integrity invalid", validPlace.address, retrievedPlace.address)
@@ -83,11 +83,11 @@ class PlaceDatabaseTest {
 
         // add place and check validity
         placeDb.addPlace(validPlace.copy(placeToDeleteMap))
-        Assert.assertNotNull("Insertion failed", placeDb.getPlace(id))
+        Assert.assertNotNull("Insertion failed", placeDb.getPlaceByColumn("_id", id))
 
         // remove place and check validity
-        placeDb.removePlace(id)
-        Assert.assertNull("Deletion invalid", placeDb.getPlace(id))
+        placeDb.removePlaceByColumn("_id", id)
+        Assert.assertNull("Deletion invalid", placeDb.getPlaceByColumn("_id", id))
         Assert.assertEquals("Size after deletion incorrect", 1, placeDb.getAllPlaces().size)
     }
 

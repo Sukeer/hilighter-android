@@ -45,12 +45,18 @@ class PlaceDb(val context: Context = App.instance) {
         }
     }
 
-    fun removePlace(id: String) = dbHelper.use {
-        delete(PlaceConstant.TABLE_NAME, "_id = {placeId}", "placeId" to id)
+    fun getPlaceByColumn(column: String, value: Any) = dbHelper.use {
+        select(PlaceConstant.TABLE_NAME)
+                .where("$column = {value}", "value" to value)
+                .parseOpt(parser)
     }
 
-    fun getPlace(id: String) = dbHelper.use {
-        select(PlaceConstant.TABLE_NAME).where("_id = {placeId}", "placeId" to id).parseOpt(parser)
+    fun removePlaceByColumn(column: String, value: Any) = dbHelper.use {
+        delete(PlaceConstant.TABLE_NAME, "$column = {value}", "value" to value)
+    }
+
+    fun removePlace(id: String) = dbHelper.use {
+        delete(PlaceConstant.TABLE_NAME, "_id = {placeId}", "placeId" to id)
     }
 
     fun getAllPlaces() = dbHelper.use {

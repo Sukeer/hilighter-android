@@ -45,13 +45,13 @@ class HighlightDb(val context: Context = App.instance) {
         }
     }
 
-    fun removeHighlight(id: Long) = dbHelper.use {
-        delete(HighlightConstant.TABLE_NAME, "_id = {highlightId}", "highlightId" to id)
+    fun removeHighlightByColumn(column: String, value: Any) = dbHelper.use {
+        delete(HighlightConstant.TABLE_NAME, "$column = {value}", "value" to value)
     }
 
-    fun getHighlight(id: Long) = dbHelper.use {
+    fun getHighlightByColumn(column: String, value: Any) = dbHelper.use {
         select(HighlightConstant.TABLE_NAME)
-                .where("_id = {highlightId}", "highlightId" to id)
+                .where("$column = {value}", "value" to value)
                 .parseOpt(parser)
     }
 

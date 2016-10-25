@@ -22,8 +22,8 @@ class PersonDb(val context: Context = App.instance) {
         }
 
     // parse row of Cursor into model object
-    private val parser = rowParser { _id: String, name: String, email: String, photo: String, uid: String ->
-        PersonModel(_id, name, email, photo, uid)
+    private val parser = rowParser { _id: String, name: String, email: String, photo: String ->
+        PersonModel(_id, name, email, photo)
     }
 
     fun clearTable() = dbHelper.use {
@@ -44,13 +44,13 @@ class PersonDb(val context: Context = App.instance) {
         }
     }
 
-    fun removePerson(id: String) = dbHelper.use {
-        delete(PersonConstant.TABLE_NAME, "_id = {personId}", "personId" to id)
+    fun removePersonByColumn(column: String, value: Any) = dbHelper.use {
+        delete(PersonConstant.TABLE_NAME, "$column = {value}", "value" to value)
     }
 
-    fun getPerson(id: String) = dbHelper.use {
+    fun getPersonByColumn(column: String, value: Any) = dbHelper.use {
         select(PersonConstant.TABLE_NAME)
-                .where("_id = {personId}", "personId" to id)
+                .where("$column = {value}", "value" to value)
                 .parseOpt(parser)
     }
 

@@ -25,7 +25,6 @@ object PersonConstant {
     val COL_NAME = "name"
     val COL_EMAIL = "email"
     val COL_PHOTO = "photo"
-    val COL_UID = "uid"
 }
 
 object HighlightConstant {

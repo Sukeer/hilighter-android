@@ -45,6 +45,16 @@ class RecordDb(val context: Context = App.instance) {
         }
     }
 
+    fun getRecordByColumn(column: String, value: Any) = dbHelper.use {
+        select(RecordConstant.TABLE_NAME)
+                .where("$column = {value}", "value" to value)
+                .parseOpt(parser)
+    }
+
+    fun removeRecordByColumn(column: String, value: Any) = dbHelper.use {
+        delete(RecordConstant.TABLE_NAME, "$column = {value}", "value" to value)
+    }
+
     fun removeRecord(id: Long) = dbHelper.use {
         delete(RecordConstant.TABLE_NAME, "_id = {recordId}", "recordId" to id)
     }

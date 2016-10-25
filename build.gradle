@@ -2,7 +2,8 @@
 
 buildscript {
     ext.kotlin_version = '1.0.4'
-    ext.anko_sqlite_version = '0.8.3'
+    ext.anko_sqlite_version = '0.9'
+    ext.anko_version = '0.9'
 
     repositories {
         jcenter()

@@ -25,7 +25,7 @@ class RecordDatabaseTest {
         lateinit private var recordDb: RecordDb
 
         private val validPlace = PlaceModel("1", "Willis Tower", "77 West Wacker", "18000000000", "www.google.com", 45.3909, 23.83291, 1, 1, 3)
-        private val validPerson = PersonModel("1", "John Doe", "jdoe@gmail.com", "none", "a")
+        private val validPerson = PersonModel("1", "John Doe", "jdoe@gmail.com", "none")
         private val validHighlight = HighlightModel("Hello world", "1", "1", 1000)
 
         @BeforeClass @JvmStatic
@@ -58,7 +58,7 @@ class RecordDatabaseTest {
         val recordInsertionId = recordDb.addRecord(validRecord)
         Assert.assertNotEquals("Insertion ID not valid", -1, recordInsertionId)
 
-        val retrievedRecord = recordDb.getRecord(recordInsertionId)
+        val retrievedRecord = recordDb.getRecordByColumn("_id", recordInsertionId)
         Assert.assertNotNull("Record not found", retrievedRecord)
         Assert.assertEquals("Record id mismatch", recordInsertionId, retrievedRecord!!._id)
         Assert.assertEquals("Person id mismatch", validPerson._id, retrievedRecord.person)
@@ -72,7 +72,7 @@ class RecordDatabaseTest {
         val insertionId = recordDb.addRecord(RecordModel("1", "1", 999))
         Assert.assertEquals("Foreign key constraint not met", -1, insertionId)
 
-        val retrievedRecord = recordDb.getRecord(insertionId)
+        val retrievedRecord = recordDb.getRecordByColumn("_id", insertionId)
         Assert.assertNull("Retrieval incorrectly successful, foreign key constraint not met", retrievedRecord)
     }
 
@@ -84,12 +84,11 @@ class RecordDatabaseTest {
         val updatedPersonMap = HashMap(validPerson.map)
         updatedPersonMap["_id"] = "2"
         updatedPersonMap["name"] = "Sam Smith"
-        updatedPersonMap["uid"] = "b"
         personDb.addPerson(validPerson.copy(updatedPersonMap))
 
         val highlightInsertionId = highlightDb.addHighlight(validHighlight)
         val recordInsertionId = recordDb.addRecord(RecordModel(validPerson._id, validPlace._id, highlightInsertionId))
-        val validRecord = recordDb.getRecord(recordInsertionId)
+        val validRecord = recordDb.getRecordByColumn("_id", recordInsertionId)
 
         // copy modified record and update person id
         val updatedRecordMap = HashMap(validRecord!!.map)
@@ -99,7 +98,7 @@ class RecordDatabaseTest {
         recordDb.updateRecord(updatedValidRecord)
 
         // assertions
-        val retrievedRecord = recordDb.getRecord(recordInsertionId)
+        val retrievedRecord = recordDb.getRecordByColumn("_id", recordInsertionId)
         Assert.assertNotNull("Retrieval failed", retrievedRecord)
         Assert.assertEquals("Person ID not updated", updatedValidRecord.person, retrievedRecord!!.person)
         Assert.assertEquals("Integrity invalid", validRecord.place, retrievedRecord.place)
@@ -114,13 +113,13 @@ class RecordDatabaseTest {
         val recordInsertionId = recordDb.addRecord(RecordModel(validPerson._id, validPlace._id, highlightInsertionId))
 
         // assert existence
-        val retrievedRecord = recordDb.getRecord(recordInsertionId)
+        val retrievedRecord = recordDb.getRecordByColumn("_id", recordInsertionId)
         Assert.assertNotEquals("Insertion failure", -1L, recordInsertionId)
         Assert.assertNotNull("Insertion failure: record not found", retrievedRecord)
 
         // remove record and check validity
-        recordDb.removeRecord(recordInsertionId)
-        Assert.assertNull("Deletion invalid", recordDb.getRecord(recordInsertionId))
+        recordDb.removeRecordByColumn("_id", recordInsertionId)
+        Assert.assertNull("Deletion invalid", recordDb.getRecordByColumn("_id", recordInsertionId))
         Assert.assertEquals("Size after deletion incorrect", 0, recordDb.getAllRecords().size)
     }
 
