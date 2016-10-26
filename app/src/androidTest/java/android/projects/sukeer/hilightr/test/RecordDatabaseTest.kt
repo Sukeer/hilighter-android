@@ -50,15 +50,15 @@ class RecordDatabaseTest {
 
     @Test
     fun testValidInsertion() {
-        placeDb.addPlace(validPlace)
-        personDb.addPerson(validPerson)
-        val highlightInsertionId = highlightDb.addHighlight(validHighlight)
+        placeDb.addItem(validPlace)
+        personDb.addItem(validPerson)
+        val highlightInsertionId = highlightDb.addItem(validHighlight)
 
         val validRecord = RecordModel(validPerson._id, validPlace._id, highlightInsertionId)
-        val recordInsertionId = recordDb.addRecord(validRecord)
+        val recordInsertionId = recordDb.addItem(validRecord)
         Assert.assertNotEquals("Insertion ID not valid", -1, recordInsertionId)
 
-        val retrievedRecord = recordDb.getRecordByColumn("_id", recordInsertionId)
+        val retrievedRecord = recordDb.getItem("_id", recordInsertionId)
         Assert.assertNotNull("Record not found", retrievedRecord)
         Assert.assertEquals("Record id mismatch", recordInsertionId, retrievedRecord!!._id)
         Assert.assertEquals("Person id mismatch", validPerson._id, retrievedRecord.person)
@@ -69,36 +69,36 @@ class RecordDatabaseTest {
     @Test
     fun testInvalidInsertion() {
         // insertion should fail due to foreign key constraints
-        val insertionId = recordDb.addRecord(RecordModel("1", "1", 999))
+        val insertionId = recordDb.addItem(RecordModel("1", "1", 999))
         Assert.assertEquals("Foreign key constraint not met", -1, insertionId)
 
-        val retrievedRecord = recordDb.getRecordByColumn("_id", insertionId)
+        val retrievedRecord = recordDb.getItem("_id", insertionId)
         Assert.assertNull("Retrieval incorrectly successful, foreign key constraint not met", retrievedRecord)
     }
 
     @Test
     fun testUpdate() {
-        placeDb.addPlace(validPlace)
-        personDb.addPerson(validPerson)
+        placeDb.addItem(validPlace)
+        personDb.addItem(validPerson)
         // add another person with id = "2"
         val updatedPersonMap = HashMap(validPerson.map)
         updatedPersonMap["_id"] = "2"
         updatedPersonMap["name"] = "Sam Smith"
-        personDb.addPerson(validPerson.copy(updatedPersonMap))
+        personDb.addItem(validPerson.copy(updatedPersonMap))
 
-        val highlightInsertionId = highlightDb.addHighlight(validHighlight)
-        val recordInsertionId = recordDb.addRecord(RecordModel(validPerson._id, validPlace._id, highlightInsertionId))
-        val validRecord = recordDb.getRecordByColumn("_id", recordInsertionId)
+        val highlightInsertionId = highlightDb.addItem(validHighlight)
+        val recordInsertionId = recordDb.addItem(RecordModel(validPerson._id, validPlace._id, highlightInsertionId))
+        val validRecord = recordDb.getItem("_id", recordInsertionId)
 
         // copy modified record and update person id
         val updatedRecordMap = HashMap(validRecord!!.map)
         updatedRecordMap["_id"] = recordInsertionId
         updatedRecordMap["person"] = "2"
         val updatedValidRecord = validRecord.copy(updatedRecordMap)
-        recordDb.updateRecord(updatedValidRecord)
+        recordDb.updateItem(updatedValidRecord)
 
         // assertions
-        val retrievedRecord = recordDb.getRecordByColumn("_id", recordInsertionId)
+        val retrievedRecord = recordDb.getItem("_id", recordInsertionId)
         Assert.assertNotNull("Retrieval failed", retrievedRecord)
         Assert.assertEquals("Person ID not updated", updatedValidRecord.person, retrievedRecord!!.person)
         Assert.assertEquals("Integrity invalid", validRecord.place, retrievedRecord.place)
@@ -106,32 +106,32 @@ class RecordDatabaseTest {
 
     @Test
     fun testRemove() {
-        placeDb.addPlace(validPlace)
-        personDb.addPerson(validPerson)
-        highlightDb.addHighlight(validHighlight)
-        val highlightInsertionId = highlightDb.addHighlight(validHighlight)
-        val recordInsertionId = recordDb.addRecord(RecordModel(validPerson._id, validPlace._id, highlightInsertionId))
+        placeDb.addItem(validPlace)
+        personDb.addItem(validPerson)
+        highlightDb.addItem(validHighlight)
+        val highlightInsertionId = highlightDb.addItem(validHighlight)
+        val recordInsertionId = recordDb.addItem(RecordModel(validPerson._id, validPlace._id, highlightInsertionId))
 
         // assert existence
-        val retrievedRecord = recordDb.getRecordByColumn("_id", recordInsertionId)
+        val retrievedRecord = recordDb.getItem("_id", recordInsertionId)
         Assert.assertNotEquals("Insertion failure", -1L, recordInsertionId)
         Assert.assertNotNull("Insertion failure: record not found", retrievedRecord)
 
         // remove record and check validity
-        recordDb.removeRecordByColumn("_id", recordInsertionId)
-        Assert.assertNull("Deletion invalid", recordDb.getRecordByColumn("_id", recordInsertionId))
-        Assert.assertEquals("Size after deletion incorrect", 0, recordDb.getAllRecords().size)
+        recordDb.removeItem("_id", recordInsertionId)
+        Assert.assertNull("Deletion invalid", recordDb.getItem("_id", recordInsertionId))
+        Assert.assertEquals("Size after deletion incorrect", 0, recordDb.getAllItems().size)
     }
 
     @Test
     fun testRetrieveAllRecords() {
-        placeDb.addPlace(validPlace)
-        personDb.addPerson(validPerson)
-        highlightDb.addHighlight(validHighlight)
-        val highlightInsertionId = highlightDb.addHighlight(validHighlight)
-        val recordInsertionId = recordDb.addRecord(RecordModel(validPerson._id, validPlace._id, highlightInsertionId))
+        placeDb.addItem(validPlace)
+        personDb.addItem(validPerson)
+        highlightDb.addItem(validHighlight)
+        val highlightInsertionId = highlightDb.addItem(validHighlight)
+        val recordInsertionId = recordDb.addItem(RecordModel(validPerson._id, validPlace._id, highlightInsertionId))
 
-        val records = recordDb.getAllRecords()
+        val records = recordDb.getAllItems()
         Assert.assertNotNull("Retrieval failed", records)
         Assert.assertEquals("Size incorrect", 1, records.size)
     }

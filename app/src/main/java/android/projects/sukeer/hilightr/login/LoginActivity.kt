@@ -3,7 +3,6 @@ package android.projects.sukeer.hilightr.login
 import android.content.Intent
 import android.os.Bundle
 import android.projects.sukeer.hilightr.R
-import android.projects.sukeer.hilightr.database.PersonConstant
 import android.projects.sukeer.hilightr.database.PersonDb
 import android.projects.sukeer.hilightr.database.PersonModel
 import android.projects.sukeer.hilightr.utility.App
@@ -68,13 +67,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initializeFirebase() {
+
         auth = FirebaseAuth.getInstance()
         authListener = FirebaseAuth.AuthStateListener {
             val currUser = it.currentUser
             // user signed in
             if (currUser != null) {
-                if (personDb.getPersonByColumn(PersonConstant.COL_ID, currUser.uid) == null) {
-                    personDb.addPerson(PersonModel(currUser.uid, currUser.displayName!!,
+                if (personDb.getItem(PersonModel.constants.COL_ID, currUser.uid) == null) {
+                    personDb.addItem(PersonModel(currUser.uid, currUser.displayName!!,
                             currUser.email!!, currUser.photoUrl!!.toString()))
 
                     log("signed_in: ${currUser.uid}\n" +

@@ -39,8 +39,8 @@ class PlaceDatabaseTest {
 
     @Test
     fun testValidInsertion() {
-        placeDb.addPlace(validPlace)
-        val retrievedPlace = placeDb.getPlaceByColumn("_id", validPlace._id)
+        placeDb.addItem(validPlace)
+        val retrievedPlace = placeDb.getItem("_id", validPlace._id)
 
         Assert.assertNotNull("Retrieval failed", retrievedPlace)
         Assert.assertEquals("ID invalid", validPlace._id, retrievedPlace!!._id)
@@ -57,16 +57,16 @@ class PlaceDatabaseTest {
 
     @Test
     fun testUpdate() {
-        placeDb.addPlace(validPlace)
+        placeDb.addItem(validPlace)
 
         // copy modified place and update in database
         val updatedPlaceMap = HashMap(validPlace.map)
         updatedPlaceMap.put("name", "Sears Tower")
         val updatedValidPlace = validPlace.copy(updatedPlaceMap)
-        placeDb.updatePlace(updatedValidPlace)
+        placeDb.updateItem(updatedValidPlace)
 
         // assertions
-        val retrievedPlace = placeDb.getPlaceByColumn("_id", validPlace._id)
+        val retrievedPlace = placeDb.getItem("_id", validPlace._id)
         Assert.assertNotNull("Retrieval failed", retrievedPlace)
         Assert.assertEquals("Update name invalid", "Sears Tower", retrievedPlace!!.name)
         Assert.assertEquals("Integrity invalid", validPlace.address, retrievedPlace.address)
@@ -74,7 +74,7 @@ class PlaceDatabaseTest {
 
     @Test
     fun testRemove() {
-        placeDb.addPlace(validPlace)
+        placeDb.addItem(validPlace)
 
         // copy modified place and add to database for future deletion
         val placeToDeleteMap = HashMap(validPlace.map)
@@ -82,26 +82,26 @@ class PlaceDatabaseTest {
         val id = placeToDeleteMap["_id"] as String
 
         // add place and check validity
-        placeDb.addPlace(validPlace.copy(placeToDeleteMap))
-        Assert.assertNotNull("Insertion failed", placeDb.getPlaceByColumn("_id", id))
+        placeDb.addItem(validPlace.copy(placeToDeleteMap))
+        Assert.assertNotNull("Insertion failed", placeDb.getItem("_id", id))
 
         // remove place and check validity
-        placeDb.removePlaceByColumn("_id", id)
-        Assert.assertNull("Deletion invalid", placeDb.getPlaceByColumn("_id", id))
-        Assert.assertEquals("Size after deletion incorrect", 1, placeDb.getAllPlaces().size)
+        placeDb.removeItem("_id", id)
+        Assert.assertNull("Deletion invalid", placeDb.getItem("_id", id))
+        Assert.assertEquals("Size after deletion incorrect", 1, placeDb.getAllItems().size)
     }
 
     @Test
     fun testRetrieveAllPlaces() {
-        placeDb.addPlace(validPlace)
+        placeDb.addItem(validPlace)
 
         // add additional place
         val newPlace = HashMap(validPlace.map)
         newPlace["_id"] = "2"
         newPlace["name"] = "Bay Bridge"
-        placeDb.addPlace(validPlace.copy(newPlace))
+        placeDb.addItem(validPlace.copy(newPlace))
 
-        val places = placeDb.getAllPlaces()
+        val places = placeDb.getAllItems()
         Assert.assertNotNull("Retrieval failed", places)
         Assert.assertEquals("Size incorrect", 2, places.size)
 

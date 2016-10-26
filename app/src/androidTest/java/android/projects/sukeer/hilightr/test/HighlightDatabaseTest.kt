@@ -47,11 +47,11 @@ class HighlightDatabaseTest {
 
     @Test
     fun testValidInsertion() {
-        placeDb.addPlace(validPlace)
-        personDb.addPerson(validPerson)
-        val insertionId = highlightDb.addHighlight(validHighlight)
+        placeDb.addItem(validPlace)
+        personDb.addItem(validPerson)
+        val insertionId = highlightDb.addItem(validHighlight)
 
-        val retrievedHighlight = highlightDb.getHighlightByColumn("_id", insertionId)
+        val retrievedHighlight = highlightDb.getItem("_id", insertionId)
 
         Assert.assertNotNull("Retrieval failed", retrievedHighlight)
         Assert.assertEquals("_id invalid", insertionId, retrievedHighlight!!._id)
@@ -64,28 +64,28 @@ class HighlightDatabaseTest {
     @Test
     fun testInvalidInsertion() {
         // insertion should fail due to foreign key constraints
-        val insertionId = highlightDb.addHighlight(validHighlight)
+        val insertionId = highlightDb.addItem(validHighlight)
         Assert.assertEquals("Foreign key constraint not met", -1, insertionId)
 
-        val retrievedHighlight = highlightDb.getHighlightByColumn("_id", insertionId)
+        val retrievedHighlight = highlightDb.getItem("_id", insertionId)
         Assert.assertNull("Retrieval success, foreign key constraint not met", retrievedHighlight)
     }
 
     @Test
     fun testUpdate() {
-        placeDb.addPlace(validPlace)
-        personDb.addPerson(validPerson)
-        val insertionId = highlightDb.addHighlight(validHighlight)
+        placeDb.addItem(validPlace)
+        personDb.addItem(validPerson)
+        val insertionId = highlightDb.addItem(validHighlight)
 
         // copy modified highlight and update in database
         val updatedHighlightMap = HashMap(validHighlight.map)
         updatedHighlightMap["_id"] = insertionId
         updatedHighlightMap["message"] = "Bye world!"
         val updatedValidHighlight = validHighlight.copy(updatedHighlightMap)
-        highlightDb.updateHighlight(updatedValidHighlight)
+        highlightDb.updateItem(updatedValidHighlight)
 
         // assertions
-        val retrievedHighlight = highlightDb.getHighlightByColumn("_id", insertionId)
+        val retrievedHighlight = highlightDb.getItem("_id", insertionId)
         Assert.assertNotNull("Retrieval failed", retrievedHighlight)
         Assert.assertEquals("Message not updated", updatedValidHighlight.message, retrievedHighlight!!.message)
         Assert.assertEquals("Integrity invalid", validHighlight.place, retrievedHighlight.place)
@@ -93,36 +93,36 @@ class HighlightDatabaseTest {
 
     @Test
     fun testRemove() {
-        placeDb.addPlace(validPlace)
-        personDb.addPerson(validPerson)
-        highlightDb.addHighlight(validHighlight)
+        placeDb.addItem(validPlace)
+        personDb.addItem(validPerson)
+        highlightDb.addItem(validHighlight)
 
         // copy modified highlight and add to database for future deletion
         val highlightToDeleteMap = HashMap(validHighlight.map)
         highlightToDeleteMap["message"] = "Good morning world"
 
         // add highlight and check validity
-        val insertionIdForDeletion = highlightDb.addHighlight(validHighlight.copy(highlightToDeleteMap))
-        Assert.assertNotNull("Insertion failed", highlightDb.getHighlightByColumn("_id", insertionIdForDeletion))
+        val insertionIdForDeletion = highlightDb.addItem(validHighlight.copy(highlightToDeleteMap))
+        Assert.assertNotNull("Insertion failed", highlightDb.getItem("_id", insertionIdForDeletion))
 
         // remove highlight and check validity
-        highlightDb.removeHighlightByColumn("_id", insertionIdForDeletion)
-        Assert.assertNull("Deletion invalid", highlightDb.getHighlightByColumn("_id", insertionIdForDeletion))
-        Assert.assertEquals("Size after deletion incorrect", 1, highlightDb.getAllHighlights().size)
+        highlightDb.removeItem("_id", insertionIdForDeletion)
+        Assert.assertNull("Deletion invalid", highlightDb.getItem("_id", insertionIdForDeletion))
+        Assert.assertEquals("Size after deletion incorrect", 1, highlightDb.getAllItems().size)
     }
 
     @Test
     fun testRetrieveAllHighlights() {
-        placeDb.addPlace(validPlace)
-        personDb.addPerson(validPerson)
-        highlightDb.addHighlight(validHighlight)
+        placeDb.addItem(validPlace)
+        personDb.addItem(validPerson)
+        highlightDb.addItem(validHighlight)
 
         // add additional highlight
         val newHighlight = HashMap(validHighlight.map)
         newHighlight["message"] = "What's up world"
-        highlightDb.addHighlight(validHighlight.copy(newHighlight))
+        highlightDb.addItem(validHighlight.copy(newHighlight))
 
-        val highlights = highlightDb.getAllHighlights()
+        val highlights = highlightDb.getAllItems()
         Assert.assertNotNull("Retrieval failed", highlights)
         Assert.assertEquals("Size incorrect", 2, highlights.size)
     }

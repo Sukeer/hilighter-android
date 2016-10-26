@@ -39,8 +39,8 @@ class PersonDatabaseTest {
 
     @Test
     fun testValidInsertion() {
-        personDb.addPerson(validPerson)
-        val retrievedPerson = personDb.getPersonByColumn("_id", validPerson._id)
+        personDb.addItem(validPerson)
+        val retrievedPerson = personDb.getItem("_id", validPerson._id)
 
         Assert.assertNotNull("Retrieval failed", retrievedPerson)
         Assert.assertEquals("ID invalid", validPerson._id, retrievedPerson!!._id)
@@ -51,16 +51,16 @@ class PersonDatabaseTest {
 
     @Test
     fun testUpdate() {
-        personDb.addPerson(validPerson)
+        personDb.addItem(validPerson)
 
         // copy modified person and update in database
         val updatedPersonMap = HashMap(validPerson.map)
         updatedPersonMap["name"] = "Mary Doe"
         val updatedValidPerson = validPerson.copy(updatedPersonMap)
-        personDb.updatePerson(updatedValidPerson)
+        personDb.updateItem(updatedValidPerson)
 
         // assertions
-        val retrievedPerson = personDb.getPersonByColumn("_id", validPerson._id)
+        val retrievedPerson = personDb.getItem("_id", validPerson._id)
         Assert.assertNotNull("Retrieval failed", retrievedPerson)
         Assert.assertEquals("Update name invalid", "Mary Doe", retrievedPerson!!.name)
         Assert.assertEquals("Integrity invalid", validPerson.email, retrievedPerson.email)
@@ -68,7 +68,7 @@ class PersonDatabaseTest {
 
     @Test
     fun testRemove() {
-        personDb.addPerson(validPerson)
+        personDb.addItem(validPerson)
 
         // copy modified person and add to database for future deletion
         val personToDeleteMap = HashMap(validPerson.map)
@@ -76,26 +76,26 @@ class PersonDatabaseTest {
         val id = personToDeleteMap["_id"] as String
 
         // add person and check validity
-        personDb.addPerson(validPerson.copy(personToDeleteMap))
-        Assert.assertNotNull("Insertion failed", personDb.getPersonByColumn("_id", id))
+        personDb.addItem(validPerson.copy(personToDeleteMap))
+        Assert.assertNotNull("Insertion failed", personDb.getItem("_id", id))
 
         // remove person and check validity
-        personDb.removePersonByColumn("_id", id)
-        Assert.assertNull("Deletion invalid", personDb.getPersonByColumn("_id", id))
-        Assert.assertEquals("Size after deletion incorrect", 1, personDb.getAllPersons().size)
+        personDb.removeItem("_id", id)
+        Assert.assertNull("Deletion invalid", personDb.getItem("_id", id))
+        Assert.assertEquals("Size after deletion incorrect", 1, personDb.getAllItems().size)
     }
 
     @Test
     fun testRetrieveAllPersons() {
-        personDb.addPerson(validPerson)
+        personDb.addItem(validPerson)
 
         // add additional person
         val newPerson = HashMap(validPerson.map)
         newPerson["_id"] = "2"
         newPerson["name"] = "Clark Kent"
-        personDb.addPerson(validPerson.copy(newPerson))
+        personDb.addItem(validPerson.copy(newPerson))
 
-        val persons = personDb.getAllPersons()
+        val persons = personDb.getAllItems()
         Assert.assertNotNull("Retrieval failed", persons)
         Assert.assertEquals("Size incorrect", 2, persons.size)
     }

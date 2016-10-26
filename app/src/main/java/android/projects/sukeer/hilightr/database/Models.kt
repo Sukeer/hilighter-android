@@ -7,8 +7,34 @@ import java.util.*
  * Author: Sukeerthi Khadri
  * Created: 10/9/16
  */
-data class PlaceModel(val map: MutableMap<String, Any?>) {
-    var _id: String by map
+interface DbModel {
+    val map: MutableMap<String, Any?>
+    val _id: Any
+}
+
+interface TableConstant {
+    val TABLE_NAME: String
+    val COL_ID: String
+        get() = "_id"
+}
+
+data class PlaceModel(override val map: MutableMap<String, Any?>) : DbModel {
+
+    companion object constants : TableConstant {
+        override val TABLE_NAME = "place"
+        override val COL_ID = "_id"
+        val COL_NAME = "name"
+        val COL_ADDR = "address"
+        val COL_PHONE = "phone"
+        val COL_WEB = "website"
+        val COL_LAT = "latitude"
+        val COL_LON = "longitude"
+        val COL_TYPE = "type"
+        val COL_PRICE = "price"
+        val COL_RATING = "rating"
+    }
+
+    override var _id: String by map
     var name: String by map
     var address: String by map
     var phone: String by map
@@ -34,8 +60,17 @@ data class PlaceModel(val map: MutableMap<String, Any?>) {
     }
 }
 
-data class PersonModel(val map: MutableMap<String, Any?>) {
-    var _id: String by map
+data class PersonModel(override val map: MutableMap<String, Any?>) : DbModel {
+
+    companion object constants : TableConstant {
+        override val TABLE_NAME = "person"
+        override val COL_ID = "_id"
+        val COL_NAME = "name"
+        val COL_EMAIL = "email"
+        val COL_PHOTO = "photo"
+    }
+
+    override var _id: String by map
     var name: String by map
     var email: String by map
     var photo: String by map
@@ -48,8 +83,18 @@ data class PersonModel(val map: MutableMap<String, Any?>) {
     }
 }
 
-data class HighlightModel(val map: MutableMap<String, Any?>) {
-    var _id: Long by map
+data class HighlightModel(override val map: MutableMap<String, Any?>) : DbModel {
+
+    companion object constants : TableConstant {
+        override val TABLE_NAME = "highlight"
+        override val COL_ID = "_id"
+        val COL_MESSAGE = "message"
+        val COL_PERSON = "person"
+        val COL_PLACE = "place"
+        val COL_DATE = "date"
+    }
+
+    override var _id: Long by map
     var message: String by map
     var person: String by map
     var place: String by map
@@ -63,8 +108,17 @@ data class HighlightModel(val map: MutableMap<String, Any?>) {
     }
 }
 
-data class RecordModel(val map: MutableMap<String, Any?>) {
-    var _id: Long by map
+data class RecordModel(override val map: MutableMap<String, Any?>) : DbModel {
+
+    companion object constants : TableConstant {
+        override val TABLE_NAME = "record"
+        override val COL_ID = "_id"
+        val COL_PER_ID = "person"
+        val COL_PLACE_ID = "place"
+        val COL_HIGHLIGHT_ID = "highlight"
+    }
+
+    override var _id: Long by map
     var person: String by map
     var place: String by map
     var highlight: Long by map

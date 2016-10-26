@@ -1,6 +1,7 @@
 package android.projects.sukeer.hilightr.utility
 
 import android.database.sqlite.SQLiteDatabase
+import android.projects.sukeer.hilightr.database.TableConstant
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 
