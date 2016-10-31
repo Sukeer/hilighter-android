@@ -11,7 +11,6 @@ import org.jetbrains.anko.db.rowParser
  */
 class PlaceDb(override val context: Context = App.instance) : DbDao<PlaceModel>() {
 
-
     // parse row of Cursor into model object
     override val parser = rowParser { _id: String, name: String, address: String, phone: String,
                                       website: String, latitude: Double, longitude: Double, type: Int, price: Int, rating: Int ->

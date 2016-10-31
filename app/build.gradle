@@ -35,7 +35,7 @@ dependencies {
     compile "org.jetbrains.anko:anko-common:$anko_version"
 
     compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.google.firebase:firebase-auth:9.8.00'
+    compile 'com.google.firebase:firebase-auth:9.8.0'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.android.support:support-v4:25.0.0'
     testCompile 'junit:junit:4.12'

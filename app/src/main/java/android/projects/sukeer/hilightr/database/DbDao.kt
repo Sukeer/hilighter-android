@@ -11,9 +11,9 @@ import org.jetbrains.anko.db.*
  * Author: Sukeerthi Khadri
  * Created: 10/25/16
  */
-abstract class DbDao<Model : DbModel> {
+abstract class DbDao<T : DbModel> {
 
-    abstract val parser: RowParser<Model>
+    abstract val parser: RowParser<T>
     abstract val context: Context
     abstract val constants: TableConstant
 
@@ -24,13 +24,13 @@ abstract class DbDao<Model : DbModel> {
         clear(constants.TABLE_NAME)
     }
 
-    fun addItem(item: Model) = dbHelper.use {
+    fun addItem(item: T) = dbHelper.use {
         with(item) {
             insert(constants.TABLE_NAME, *map.toVarArgArray())
         }
     }
 
-    fun updateItem(updatedItem: Model) = dbHelper.use {
+    fun updateItem(updatedItem: T) = dbHelper.use {
         with(updatedItem) {
             update(constants.TABLE_NAME, *map.toVarArgArray())
                     .where("_id = {id}", "id" to _id)
@@ -54,3 +54,16 @@ abstract class DbDao<Model : DbModel> {
     }
 
 }
+
+/*
+This class is generic because if we didn't use generics and simply specified DbModel as the type for the row parser and
+the other pieces of code where an instance of DbModel (including its subclasses) is expected, then we could pass two or
+more different instances of DbModel to the row parser and methods of this class. For example,
+
+parser: RowParser<RecordModel>
+val item: PersonModel
+addItem(item)
+
+Here we can insert items that are not compatible with the parser which will cause error upon retrieval due to the wrong
+item being inserted and parsed.
+ */

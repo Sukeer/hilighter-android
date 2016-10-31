@@ -3,6 +3,8 @@ package android.projects.sukeer.hilightr.login
 import android.content.Intent
 import android.os.Bundle
 import android.projects.sukeer.hilightr.R
+import android.projects.sukeer.hilightr.database.DatabaseFragment
+import android.projects.sukeer.hilightr.database.DbModel
 import android.projects.sukeer.hilightr.database.PersonDb
 import android.projects.sukeer.hilightr.database.PersonModel
 import android.projects.sukeer.hilightr.utility.App
@@ -20,7 +22,31 @@ import org.jetbrains.anko.toast
  * Author: Sukeerthi Khadri
  * Created: 10/22/16
  */
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), DatabaseFragment.Companion.BackgroundTaskListener {
+    override fun onPreExecute() {
+        log("onPreExecute")
+    }
+
+    override fun onProgressUpdate() {
+        log("onProgressUpdate")
+    }
+
+    override fun onPostExecute(result: List<Any>) {
+        log("onPostExecute")
+        dbFrag?.updateTaskExecutingStatus(false)
+        result.forEach {
+            when (it) {
+                is List<*> -> it.forEach { log(it.toString()) }
+                is DbModel -> log("${it._id}")
+                else -> log(it.toString())
+            }
+        }
+    }
+
+    override fun onCancelled(result: List<Any>?) {
+        log("onCancelled")
+        log("$result")
+    }
 
     // Facebook
     private lateinit var callbackManager: CallbackManager
@@ -29,6 +55,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var authListener: FirebaseAuth.AuthStateListener
     // Database
     private lateinit var personDb: PersonDb
+
+    private var dbFrag: DatabaseFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +71,15 @@ class LoginActivity : AppCompatActivity() {
             if (user != null) {
                 log("authstatechange: signed_in ${user.uid}\n" +
                         "${user.displayName}\n${user.photoUrl}\n${user.email}")
+
+                dbFrag = supportFragmentManager.findFragmentByTag("Dbfrag") as DatabaseFragment?
+                if (dbFrag == null) {
+                    dbFrag = DatabaseFragment()
+                    supportFragmentManager.beginTransaction().add(R.id.container, dbFrag, "Dbfrag").commit()
+                    dbFrag?.startTask(personDb, { personDb.getAllItems() }, { personDb.getItem(PersonModel.COL_ID, user.uid) })
+                }
+                //log (dbFrag.cancelTask().toString())
+
             } else {
                 log("authstatechange: signed_out")
             }
@@ -66,23 +103,6 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun initializeFirebase() {
-
-        auth = FirebaseAuth.getInstance()
-        authListener = FirebaseAuth.AuthStateListener {
-            val currUser = it.currentUser
-            // user signed in
-            if (currUser != null) {
-                if (personDb.getItem(PersonModel.constants.COL_ID, currUser.uid) == null) {
-                    personDb.addItem(PersonModel(currUser.uid, currUser.displayName!!,
-                            currUser.email!!, currUser.photoUrl!!.toString()))
-
-                    log("signed_in: ${currUser.uid}\n" +
-                            "${currUser.displayName}\n${currUser.photoUrl}\n${currUser.email}")
-                }
-            }
-        }
-    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);

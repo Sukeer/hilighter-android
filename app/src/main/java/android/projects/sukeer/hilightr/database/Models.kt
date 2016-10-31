@@ -22,7 +22,6 @@ data class PlaceModel(override val map: MutableMap<String, Any?>) : DbModel {
 
     companion object constants : TableConstant {
         override val TABLE_NAME = "place"
-        override val COL_ID = "_id"
         val COL_NAME = "name"
         val COL_ADDR = "address"
         val COL_PHONE = "phone"
@@ -64,7 +63,6 @@ data class PersonModel(override val map: MutableMap<String, Any?>) : DbModel {
 
     companion object constants : TableConstant {
         override val TABLE_NAME = "person"
-        override val COL_ID = "_id"
         val COL_NAME = "name"
         val COL_EMAIL = "email"
         val COL_PHOTO = "photo"
@@ -87,7 +85,6 @@ data class HighlightModel(override val map: MutableMap<String, Any?>) : DbModel 
 
     companion object constants : TableConstant {
         override val TABLE_NAME = "highlight"
-        override val COL_ID = "_id"
         val COL_MESSAGE = "message"
         val COL_PERSON = "person"
         val COL_PLACE = "place"
@@ -112,7 +109,6 @@ data class RecordModel(override val map: MutableMap<String, Any?>) : DbModel {
 
     companion object constants : TableConstant {
         override val TABLE_NAME = "record"
-        override val COL_ID = "_id"
         val COL_PER_ID = "person"
         val COL_PLACE_ID = "place"
         val COL_HIGHLIGHT_ID = "highlight"
