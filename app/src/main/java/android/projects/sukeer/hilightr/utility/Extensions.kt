@@ -1,8 +1,6 @@
 package android.projects.sukeer.hilightr.utility
 
 import android.database.sqlite.SQLiteDatabase
-import android.projects.sukeer.hilightr.database.TableConstant
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 
 /**
@@ -21,6 +19,6 @@ fun <K, V : Any> MutableMap<K, V?>.toVarArgArray(): Array<out Pair<K, V>> =
         map({ Pair(it.key, it.value!!) }).toTypedArray()
 
 // AppCompatActivity extensions
-fun AppCompatActivity.log(message: String) {
+fun Any.log(message: String) {
     Log.d(javaClass.simpleName, message)
 }

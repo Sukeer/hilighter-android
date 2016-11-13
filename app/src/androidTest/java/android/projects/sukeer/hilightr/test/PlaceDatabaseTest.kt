@@ -1,7 +1,7 @@
 package android.projects.sukeer.hilightr.test
 
-import android.projects.sukeer.hilightr.database.PlaceDb
-import android.projects.sukeer.hilightr.database.PlaceModel
+import android.projects.sukeer.hilightr.database.sqlitedb.PlaceDb
+import android.projects.sukeer.hilightr.database.sqlitedb.PlaceModel
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import org.junit.Assert

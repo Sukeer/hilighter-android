@@ -1,4 +1,4 @@
-package android.projects.sukeer.hilightr.database
+package android.projects.sukeer.hilightr.database.sqlitedb
 
 import java.util.*
 

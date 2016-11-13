@@ -1,7 +1,7 @@
 package android.projects.sukeer.hilightr.test
 
-import android.projects.sukeer.hilightr.database.PersonDb
-import android.projects.sukeer.hilightr.database.PersonModel
+import android.projects.sukeer.hilightr.database.sqlitedb.PersonDb
+import android.projects.sukeer.hilightr.database.sqlitedb.PersonModel
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import org.junit.Assert

@@ -1,4 +1,4 @@
-package android.projects.sukeer.hilightr.database
+package android.projects.sukeer.hilightr.database.sqlitedb
 
 import android.content.Context
 import android.projects.sukeer.hilightr.utility.App
@@ -48,6 +48,12 @@ abstract class DbDao<T : DbModel> {
                 .parseOpt(parser)
     }
 
+    fun getItems(column: String, value: Any) = dbHelper.use {
+        select(constants.TABLE_NAME)
+                .where("$column = {value}", "value" to value)
+                .parseList(parser)
+    }
+
     fun getAllItems() = dbHelper.use {
         select(constants.TABLE_NAME)
                 .exec { parseList(parser) }
@@ -63,6 +69,8 @@ more different instances of DbModel to the row parser and methods of this class.
 parser: RowParser<RecordModel>
 val item: PersonModel
 addItem(item)
+
+getItem - would fail as rowparser is for RecordModel, not PersonModel
 
 Here we can insert items that are not compatible with the parser which will cause error upon retrieval due to the wrong
 item being inserted and parsed.
