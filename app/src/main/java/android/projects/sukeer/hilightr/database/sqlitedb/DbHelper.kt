@@ -40,6 +40,7 @@ class DbHelper(context: Context = App.instance) : ManagedSQLiteOpenHelper(contex
                 PersonModel.constants.COL_PHOTO to TEXT + NOT_NULL)
         db.createTable(HighlightModel.constants.TABLE_NAME, true,
                 HighlightModel.constants.COL_ID to INTEGER + PRIMARY_KEY,
+                HighlightModel.constants.COL_TITLE to TEXT + NOT_NULL,
                 HighlightModel.constants.COL_MESSAGE to TEXT + NOT_NULL,
                 HighlightModel.constants.COL_PERSON to TEXT + NOT_NULL,
                 HighlightModel.constants.COL_PLACE to TEXT + NOT_NULL,

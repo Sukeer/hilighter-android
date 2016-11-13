@@ -12,8 +12,8 @@ import org.jetbrains.anko.db.rowParser
 class HighlightDb(override val context: Context = App.instance) : DbDao<HighlightModel>() {
 
     // parse row of Cursor into model object
-    override val parser = rowParser { _id: Long?, message: String?, person: String?, place: String?, date: Long? ->
-        val params = mutableMapOf("_id" to _id, "message" to message, "person" to person, "place" to place, "date" to date)
+    override val parser = rowParser { _id: Long?, title: String?, message: String?, person: String?, place: String?, date: Long? ->
+        val params = mutableMapOf("_id" to _id, "title" to title, "message" to message, "person" to person, "place" to place, "date" to date)
         HighlightModel(params)
     }
 

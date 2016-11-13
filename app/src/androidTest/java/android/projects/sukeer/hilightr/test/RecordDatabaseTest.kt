@@ -26,7 +26,7 @@ class RecordDatabaseTest {
 
         private val validPlace = PlaceModel("1", "Willis Tower", "77 West Wacker", "18000000000", "www.google.com", 45.3909, 23.83291, 1, 1, 3)
         private val validPerson = PersonModel("1", "John Doe", "jdoe@gmail.com", "none")
-        private val validHighlight = HighlightModel("Hello world", "1", "1", 1000)
+        private val validHighlight = HighlightModel("my highlight", "Hello world", "1", "1", 1000)
 
         @BeforeClass @JvmStatic
         fun initialize() {

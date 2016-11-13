@@ -85,6 +85,7 @@ data class HighlightModel(override val map: MutableMap<String, Any?>) : DbModel 
 
     companion object constants : TableConstant {
         override val TABLE_NAME = "highlight"
+        val COL_TITLE = "title"
         val COL_MESSAGE = "message"
         val COL_PERSON = "person"
         val COL_PLACE = "place"
@@ -92,12 +93,14 @@ data class HighlightModel(override val map: MutableMap<String, Any?>) : DbModel 
     }
 
     override var _id: Long by map
+    var title: String by map
     var message: String by map
     var person: String by map
     var place: String by map
     var date: Long by map
 
-    constructor(message: String, person: String, place: String, date: Long) : this(HashMap()) {
+    constructor(title: String, message: String, person: String, place: String, date: Long) : this(HashMap()) {
+        this.title = title
         this.message = message
         this.person = person
         this.place = place

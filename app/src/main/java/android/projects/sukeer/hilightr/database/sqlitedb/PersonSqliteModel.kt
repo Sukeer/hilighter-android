@@ -1,7 +1,5 @@
 package android.projects.sukeer.hilightr.database.sqlitedb
 
-import android.projects.sukeer.hilightr.database.sqlitedb.DbTask
-import android.projects.sukeer.hilightr.database.sqlitedb.Model
 import android.projects.sukeer.hilightr.utility.log
 
 /**
