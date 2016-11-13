@@ -7,7 +7,7 @@ import android.os.AsyncTask
  * Author: Sukeerthi Khadri
  * Created: 11/5/16
  */
-class DbTask(val dbDao: DbDao<out DbModel>, var listener: Listener) : AsyncTask<DbDao<out DbModel>.() -> Any?, Unit, List<Any>>() {
+class DbTask<T: DbModel>(val dbDao: DbDao<T>, var listener: Listener) : AsyncTask<DbDao<T>.() -> Any?, Unit, List<Any>>() {
 
     interface Listener {
         fun onPreExecute()
@@ -20,7 +20,7 @@ class DbTask(val dbDao: DbDao<out DbModel>, var listener: Listener) : AsyncTask<
         listener.onPreExecute()
     }
 
-    override fun doInBackground(vararg operations: DbDao<out DbModel>.() -> Any?): List<Any> {
+    override fun doInBackground(vararg operations: DbDao<T>.() -> Any?): List<Any> {
         val results: MutableList<Any> = mutableListOf()
         for (operation in operations) {
             if (!isCancelled) {
@@ -47,4 +47,3 @@ class DbTask(val dbDao: DbDao<out DbModel>, var listener: Listener) : AsyncTask<
         listener.onProgressUpdate()
     }
 }
-

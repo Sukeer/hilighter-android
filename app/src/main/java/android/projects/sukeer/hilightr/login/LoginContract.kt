@@ -1,7 +1,7 @@
 package android.projects.sukeer.hilightr.login
 
 import android.content.Intent
-import android.projects.sukeer.hilightr.database.sqlitedb.Model
+import android.projects.sukeer.hilightr.database.sqlitedb.SqliteModel
 import com.google.firebase.auth.FirebaseUser
 
 /**
@@ -16,7 +16,7 @@ interface LoginContract {
         fun startMain()
     }
 
-    interface Presenter : Model.Listener {
+    interface Presenter : SqliteModel.Listener {
         fun addUser(user: FirebaseUser)
         fun setup()
         fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
