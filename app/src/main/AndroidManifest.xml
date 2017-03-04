@@ -4,6 +4,7 @@
     package="android.projects.sukeer.hilightr">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".utility.App"
@@ -15,6 +16,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBzRcmSXWmxOJZMDu4dNDn_g71KXvbo2pE" />
 
         <activity android:name=".login.LoginActivity">
             <intent-filter>
@@ -23,7 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -42,6 +45,10 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <activity android:name=".main.MainActivity" />
+        <activity
+            android:name=".edit.EditActivity"
+            android:parentActivityName=".main.MainActivity" />
     </application>
 
 </manifest>

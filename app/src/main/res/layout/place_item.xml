@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/place_item_height"
+    android:background="@android:color/white"
+    android:paddingBottom="@dimen/place_item_padding"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/place_item_padding">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/place_item_padding_12"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:maxWidth="240dp"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="18sp"
+        tools:text="Place title" />
+
+    <TextView
+        android:id="@+id/num_of_highlights"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textColor="@android:color/secondary_text_light"
+        android:textSize="12sp"
+        tools:text="Four highlights" />
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:adjustViewBounds="true"
+        android:maxWidth="100dp"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/common_google_signin_btn_text_light_normal" />
+
+
+</RelativeLayout>

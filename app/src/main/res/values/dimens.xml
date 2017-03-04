@@ -2,4 +2,32 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="toolbar_margin_start">72dp</dimen>
+
+    <!-- paddings -->
+    <dimen name="padding_2">2dp</dimen>
+    <dimen name="padding_4">4dp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="padding_12">12dp</dimen>
+    <dimen name="padding_16">16dp</dimen>
+    <dimen name="padding_24dp">24dp</dimen>
+    <dimen name="padding_32dp">32dp</dimen>
+    <dimen name="padding_40dp">40dp</dimen>
+    <dimen name="padding_48dp">48dp</dimen>
+    <dimen name="padding_56dp">56dp</dimen>
+
+    <!-- font size -->
+    <dimen name="logo_size">48sp</dimen>
+
+    <!-- elevations -->
+    <dimen name="fab_elevation_resting">6dp</dimen>
+    <dimen name="app_bar_elevation">4dp</dimen>
+
+    <!-- place item -->
+    <dimen name="place_item_padding_32">32dp</dimen>
+    <dimen name="place_item_height">64dp</dimen>
+    <dimen name="place_item_padding_12">12dp</dimen>
+    <dimen name="place_item_padding">8dp</dimen>
+    <dimen name="imageview_place_item_max_width">125dp</dimen>
+
 </resources>

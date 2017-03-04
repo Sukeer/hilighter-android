@@ -13,8 +13,8 @@ class PlaceDb(override val context: Context = App.instance) : DbDao<PlaceModel>(
 
     // parse row of Cursor into model object
     override val parser = rowParser { _id: String, name: String, address: String, phone: String,
-                                      website: String, latitude: Double, longitude: Double, type: Int, price: Int, rating: Int ->
-        PlaceModel(_id, name, address, phone, website, latitude, longitude, type, price, rating)
+                                      website: String, latitude: Double, longitude: Double, type: Int, price: Int, rating: Float, date_created: Long ->
+        PlaceModel(_id, name, address, phone, website, latitude, longitude, type, price, rating, date_created)
     }
 
     override val constants = PlaceModel.constants

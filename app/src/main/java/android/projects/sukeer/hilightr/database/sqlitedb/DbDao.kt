@@ -1,8 +1,10 @@
 package android.projects.sukeer.hilightr.database.sqlitedb
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE
 import android.projects.sukeer.hilightr.utility.App
 import android.projects.sukeer.hilightr.utility.clear
+import android.projects.sukeer.hilightr.utility.toContentValues
 import android.projects.sukeer.hilightr.utility.toVarArgArray
 import org.jetbrains.anko.db.*
 
@@ -17,20 +19,20 @@ abstract class DbDao<T : DbModel> {
     abstract val context: Context
     abstract val constants: TableConstant
 
-    private val dbHelper: DbHelper
+    val dbHelper: DbHelper
         get() = if (context == App.instance) DbHelper.instance else DbHelper(context)
 
     fun clearTable() = dbHelper.use {
         clear(constants.TABLE_NAME)
     }
 
-    fun addItem(item: T) = dbHelper.use {
+    open fun addItem(item: T) = dbHelper.use {
         with(item) {
-            insert(constants.TABLE_NAME, *map.toVarArgArray())
+            insertWithOnConflict(constants.TABLE_NAME, null, map.toContentValues(), CONFLICT_IGNORE)
         }
     }
 
-    fun updateItem(updatedItem: T) = dbHelper.use {
+    open fun updateItem(updatedItem: T) = dbHelper.use {
         with(updatedItem) {
             update(constants.TABLE_NAME, *map.toVarArgArray())
                     .where("_id = {id}", "id" to _id)
@@ -38,7 +40,7 @@ abstract class DbDao<T : DbModel> {
         }
     }
 
-    fun removeItem(column: String, value: Any) = dbHelper.use {
+    open fun removeItem(column: String, value: Any) = dbHelper.use {
         delete(constants.TABLE_NAME, "$column = {value}", "value" to value)
     }
 

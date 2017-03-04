@@ -12,7 +12,7 @@ import org.jetbrains.anko.db.rowParser
 class RecordDb(override val context: Context = App.instance) : DbDao<RecordModel>() {
 
     // parse row of Cursor into model object
-    override val parser = rowParser { _id: Long?, person: String?, place: String?, highlight: Long? ->
+    override val parser = rowParser { _id: Long, person: String, place: String, highlight: Long ->
         val params = mutableMapOf("_id" to _id, "person" to person, "place" to place, "highlight" to highlight)
         RecordModel(params)
     }

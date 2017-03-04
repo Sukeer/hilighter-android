@@ -12,8 +12,8 @@ import org.jetbrains.anko.db.rowParser
 class PersonDb(override val context: Context = App.instance) : DbDao<PersonModel>() {
 
     // parse row of Cursor into model object
-    override val parser = rowParser { _id: String, name: String, email: String, photo: String ->
-        PersonModel(_id, name, email, photo)
+    override val parser = rowParser { _id: String, name: String, email: String, photo: String, date_created: Long ->
+        PersonModel(_id, name, email, photo, date_created)
     }
 
     override val constants = PersonModel.constants

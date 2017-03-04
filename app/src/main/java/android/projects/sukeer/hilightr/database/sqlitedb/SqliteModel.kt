@@ -1,127 +1,112 @@
 package android.projects.sukeer.hilightr.database.sqlitedb
 
-import android.projects.sukeer.hilightr.utility.log
+import android.projects.sukeer.hilightr.adapters.HighlightListAdapter
+import android.projects.sukeer.hilightr.main.Query
 
 /**
  *
  * Author: Sukeerthi Khadri
- * Created: 11/13/16
+ * Created: 2/20/17
  */
-abstract class SqliteModel<T : DbModel> {
+abstract class SqliteModel<T : DbModel>(val db: DbDao<T>) {
 
-    interface Listener {
-        fun onItemInserted(id: Long)
-        fun onItemsRetrieved(items: List<Any>)
-        fun onItemDeleted(numOfDeletes: Int)
-        fun onItemUpdated(numOfUpdates: Int)
-        fun onCancelled(items: List<Any>?)
-    }
-
-    abstract val db: DbDao<T>
-    abstract val listener: Listener
-
-    fun insert(item: T) {
-        val dbTask = DbTask(db, object : DbTask.Listener {
-            override fun onPreExecute() {
-                log("onPreExec")
-            }
-
-            override fun onProgressUpdate() {
-                log("onProgressUp")
-            }
-
+    fun insertItem(item: T, fn: (Long) -> Unit) {
+        val task = DbTask(db, object : BaseDbTaskListener() {
             override fun onPostExecute(result: List<Any>) {
-                listener.onItemInserted(result[0] as Long)
-            }
-
-            override fun onCancelled(result: List<Any>?) {
-                log("onCancelled")
-                listener.onCancelled(result)
+                if (result.isNotEmpty() && result[0] is Long) {
+                    fn(result[0] as Long)
+                }
             }
         })
-        dbTask.execute({ db.addItem(item) })
+        task.execute({ db.addItem(item) })
     }
 
-    fun get(key: String, value: Any) {
-        val dbTask = DbTask(db, object : DbTask.Listener {
-            override fun onPreExecute() {
-                log("onPreExec")
-            }
-
-            override fun onProgressUpdate() {
-                log("onProgressUp")
-            }
-
+    fun updateItem(item: T, fn: (Int) -> Unit) {
+        val task = DbTask(db, object : BaseDbTaskListener() {
             override fun onPostExecute(result: List<Any>) {
-                listener.onItemsRetrieved(result)
-            }
-
-            override fun onCancelled(result: List<Any>?) {
-                log("onCancelled")
-                listener.onCancelled(result)
+                if (result.isNotEmpty() && result[0] is Int) {
+                    fn(result[0] as Int)
+                }
             }
         })
-        dbTask.execute({ db.getItems(key, value) })
+        task.execute({ db.updateItem(item) })
     }
 
-    fun delete(key: String, value: Any) {
-        val dbTask = DbTask(db, object : DbTask.Listener {
-            override fun onPreExecute() {
-                log("onPreExec")
-            }
-
-            override fun onProgressUpdate() {
-                log("onProgressUp")
-            }
-
+    fun removeItem(item: T, fn: (Int) -> Unit) {
+        val task = DbTask(db, object : BaseDbTaskListener() {
             override fun onPostExecute(result: List<Any>) {
-                listener.onItemDeleted(result[0] as Int)
-            }
-
-            override fun onCancelled(result: List<Any>?) {
-                log("onCancelled")
-                listener.onCancelled(result)
+                if (result.isNotEmpty() && result[0] is Int) {
+                    fn(result[0] as Int)
+                }
             }
         })
-        dbTask.execute({ db.removeItem(key, value) })
+        task.execute({ db.removeItem("_id", item._id) })
     }
 
-    fun update(updatedItem: T) {
-        val dbTask = DbTask(db, object : DbTask.Listener {
-            override fun onPreExecute() {
-                log("onPreExec")
-            }
-
-            override fun onProgressUpdate() {
-                log("onProgressUp")
-            }
-
+    fun removeItem(id: Long, fn: (Int) -> Unit) {
+        val task = DbTask(db, object : BaseDbTaskListener() {
             override fun onPostExecute(result: List<Any>) {
-                listener.onItemUpdated(result[0] as Int)
-            }
-
-            override fun onCancelled(result: List<Any>?) {
-                log("onCancelled")
-                listener.onCancelled(result)
+                if (result.isNotEmpty() && result[0] is Int) {
+                    fn(result[0] as Int)
+                }
             }
         })
-        dbTask.execute({ db.updateItem(updatedItem) })
+        task.execute({ db.removeItem("_id", id) })
     }
 
+    fun getItem(id: Any, fn: (T) -> Unit) {
+        val task = DbTask(db, object : BaseDbTaskListener() {
+            override fun onPostExecute(result: List<Any>) {
+                if (result.isNotEmpty()) {
+                    fn(result[0] as T)
+                }
+            }
+        })
+        task.execute({ db.getItem("_id", id) })
+    }
+
+    fun getItems(key: String, value: Any, fn: (List<T>) -> Unit) {
+        val task = DbTask(db, object : BaseDbTaskListener() {
+            override fun onPostExecute(result: List<Any>) {
+                if (result.isNotEmpty()) {
+                    fn(result[0] as List<T>)
+                }
+            }
+        })
+        task.execute({ db.getItems(key, value) })
+    }
+
+    fun getAllItems(fn: (List<T>) -> Unit) {
+        val task = DbTask(db, object : BaseDbTaskListener() {
+            override fun onPostExecute(result: List<Any>) {
+                if (result.isNotEmpty()) {
+                    fn(result[0] as List<T>)
+                }
+            }
+        })
+        task.execute({ db.getAllItems() })
+    }
 }
 
-class PersonSqliteModel(override val listener: Listener) : SqliteModel<PersonModel>() {
-    override val db: DbDao<PersonModel> = PersonDb()
-}
+class HighlightSqlite : SqliteModel<HighlightModel>(HighlightDb())
+class PersonSqlite : SqliteModel<PersonModel>(PersonDb())
+class PlaceSqlite : SqliteModel<PlaceModel>(PlaceDb())
+class RecordSqlite : SqliteModel<RecordModel>(RecordDb())
+class ListItemSqlite : SqliteModel<ListItemModel>(ListItemDb()) {
 
-class PlaceSqliteModel(override val listener: Listener) : SqliteModel<PlaceModel>() {
-    override val db: DbDao<PlaceModel> = PlaceDb()
-}
-
-class HighlightSqliteModel(override val listener: Listener) : SqliteModel<HighlightModel>() {
-    override val db: DbDao<HighlightModel> = HighlightDb()
-}
-
-class RecordSqliteModel(override val listener: Listener) : SqliteModel<RecordModel>() {
-    override val db: DbDao<RecordModel> = RecordDb()
+    fun getListItems(query: Query, fn: (List<HighlightListAdapter.ListItem>) -> Unit) {
+        val task = DbTask(db, object : BaseDbTaskListener() {
+            override fun onPostExecute(result: List<Any>) {
+                if (result.isNotEmpty()) {
+                    fn(result[0] as List<HighlightListAdapter.ListItem>)
+                }
+            }
+        })
+        with(query) {
+            task.execute({
+                (db as ListItemDb).getHighlightListItems(filterKey, filterValue,
+                        sort, sortValue, searchKey, searchValue)
+            })
+        }
+    }
 }

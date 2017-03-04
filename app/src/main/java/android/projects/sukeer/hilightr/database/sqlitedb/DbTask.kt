@@ -7,7 +7,7 @@ import android.os.AsyncTask
  * Author: Sukeerthi Khadri
  * Created: 11/5/16
  */
-class DbTask<T: DbModel>(val dbDao: DbDao<T>, var listener: Listener) : AsyncTask<DbDao<T>.() -> Any?, Unit, List<Any>>() {
+class DbTask<T : DbModel>(val dbDao: DbDao<T>, var listener: Listener) : AsyncTask<DbDao<T>.() -> Any?, Unit, List<Any>>() {
 
     interface Listener {
         fun onPreExecute()
@@ -21,7 +21,7 @@ class DbTask<T: DbModel>(val dbDao: DbDao<T>, var listener: Listener) : AsyncTas
     }
 
     override fun doInBackground(vararg operations: DbDao<T>.() -> Any?): List<Any> {
-        val results: MutableList<Any> = mutableListOf()
+        val results = mutableListOf<Any>()
         for (operation in operations) {
             if (!isCancelled) {
                 val result = operation(dbDao)
@@ -46,4 +46,11 @@ class DbTask<T: DbModel>(val dbDao: DbDao<T>, var listener: Listener) : AsyncTas
     override fun onProgressUpdate(vararg values: Unit) {
         listener.onProgressUpdate()
     }
+}
+
+// Base implementation of DbTask.Listener that allows for subclasses of this class to only worry about implementing onPostExecute, the callback we usually care about in an AsyncTask.
+abstract class BaseDbTaskListener : DbTask.Listener {
+    override fun onPreExecute() {}
+    override fun onProgressUpdate() {}
+    override fun onCancelled(result: List<Any>?) {}
 }
